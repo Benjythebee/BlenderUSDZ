@@ -73,11 +73,11 @@ def findUsdz(dirpath):
 def importData(context, usdData, tempDir, materials, animated):
     if animated:
         if 'startTimeCode' in usdData.metadata:
-            context.scene.frame_start = usdData['startTimeCode']
+            context.scene.frame_start = int(usdData['startTimeCode'])
         if 'endTimeCode' in usdData.metadata:
-            context.scene.frame_end = usdData['endTimeCode']
+            context.scene.frame_end = int(usdData['endTimeCode'])
         if 'timeCodesPerSecond' in usdData.metadata:
-            context.scene.render.fps = usdData['timeCodesPerSecond']
+            context.scene.render.fps = int(usdData['timeCodesPerSecond'])
     materials = importMaterials(usdData, tempDir) if materials else {}
     objects = getObjects(usdData)
     for object in objects:
@@ -483,8 +483,9 @@ def getUsdSurfaceShader(usdMat):
 def getInputData(usdMat, inputName):
     usdShader = getUsdSurfaceShader(usdMat)
     inputName = 'inputs:' + inputName
-    if inputName in usdShader:
-        return usdShader[inputName]
+    if usdShader:
+        if inputName in usdShader:
+            return usdShader[inputName]
     return None
 
 
